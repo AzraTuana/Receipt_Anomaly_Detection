@@ -18,49 +18,50 @@ autoencoder = MLPRegressor(
     random_state=42,
 )
 
-# Eksik/geçersiz verili satırlar modele gönderilmeden doğrudan anomali
-# olarak atanır. ae_score boş kalır; çünkü bu satırlar model tarafından
-# skorlanmamıştır.
+# Eksik/gecersiz verili satirlar modele gonderilmeden dogrudan anomali
+# olarak atanir. ae_score bos kalir; cunku bu satirlar model tarafindan
+# skorlanmamistir.
 df["prediction"] = -1
 df["is_anomaly"] = True
 df["ae_score"] = np.nan
 df["anomaly_level"] = 100.0
 
-if not X.empty:
-    X_scaled = scaler.fit_transform(X)
+if not X_egitim.empty:
+    X_egitim_scaled = scaler.fit_transform(X_egitim)
+    X_scaled = scaler.transform(X)
 
-    autoencoder.fit(X_scaled, X_scaled)
+    autoencoder.fit(X_egitim_scaled, X_egitim_scaled)
+
+    # Esik egitim setinin yeniden uretim hatasindan cikarilir, sonra
+    # skorlanacak tum kayitlara (egitim+dogrulama+test) sabit olarak uygulanir.
+    egitim_reconstructed = autoencoder.predict(X_egitim_scaled)
+    egitim_error = np.mean((X_egitim_scaled - egitim_reconstructed) ** 2, axis=1)
+    threshold = np.quantile(egitim_error, 1 - contamination)
+
     X_reconstructed = autoencoder.predict(X_scaled)
-
-    # Satır başına yeniden üretim hatası (ortalama kare hata)
     reconstruction_error = np.mean(
         (X_scaled - X_reconstructed) ** 2,
         axis=1
     )
 
-    # contamination oranına karşılık gelen eşik: hatası bu eşiğin
-    # üzerinde olan kayıtlar anomali kabul edilir (IsolationForest'ın
-    # contamination parametresiyle aynı mantık, elle uygulanmış hali).
-    threshold = np.quantile(reconstruction_error, 1 - contamination)
+    tahmin = np.where(reconstruction_error > threshold, -1, 1)
 
-    valid_predictions = np.where(reconstruction_error > threshold, -1, 1)
-
-    df.loc[valid_model_mask, "prediction"] = valid_predictions
-    df.loc[valid_model_mask, "is_anomaly"] = valid_predictions == -1
-    df.loc[valid_model_mask, "ae_score"] = reconstruction_error
+    df.loc[X.index, "prediction"] = tahmin
+    df.loc[X.index, "is_anomaly"] = tahmin == -1
+    df.loc[X.index, "ae_score"] = reconstruction_error
 
     minimum = reconstruction_error.min()
     maximum = reconstruction_error.max()
 
     if maximum != minimum:
-        valid_anomaly_level = (
+        anomaly_level = (
             (reconstruction_error - minimum)
             / (maximum - minimum)
         ) * 100
     else:
-        valid_anomaly_level = np.zeros(len(X))
+        anomaly_level = np.zeros(len(X))
 
-    df.loc[valid_model_mask, "anomaly_level"] = valid_anomaly_level
+    df.loc[X.index, "anomaly_level"] = anomaly_level
 
 df["anomaly_level"] = (
     df["anomaly_level"]
@@ -77,22 +78,25 @@ print(
         [
             "kayit_id",
             "fatura_no",
-            "cift_grup_id",
-            "aciklama_kategorisi",
-            "onay_durumu",
-            "grup_buyuklugu",
-            "aciklama_risk",
-            "onay_risk",
+            "split",
+            "is_kolu",
+            "satici_unvan",
+            "genel_toplam",
+            "genel_toplam_log",
+            "is_kolu_sapma_log",
+            "toplam_tutarsizligi_log",
+            "satir_toplam_tutarsizligi_log",
+            "gelecek_tarihli",
+            "yasakli_kategori_var",
+            "kategori_uyumsuzlugu_var",
+            "vkn_format_anomalisi",
             "data_quality_anomaly",
             "anomaly_level",
             "ae_score",
-            "is_anomaly",
-            "is_anomali"
+            "is_anomaly"
         ]
     ].head(30)
 )
-
-evaluate_against_ground_truth(result, "Autoencoder")
 
 result.to_csv(
     "autoencoder_result.csv",

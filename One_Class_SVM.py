@@ -17,41 +17,42 @@ model = OneClassSVM(
     gamma="scale"
 )
 
-# Eksik/geçersiz verili satırlar modele gönderilmeden doğrudan anomali
-# olarak atanır. svm_score boş kalır; çünkü bu satırlar model tarafından
-# skorlanmamıştır.
+# Eksik/gecersiz verili satirlar modele gonderilmeden dogrudan anomali
+# olarak atanir. svm_score bos kalir; cunku bu satirlar model tarafindan
+# skorlanmamistir.
 df["prediction"] = -1
 df["is_anomaly"] = True
 df["svm_score"] = np.nan
 df["anomaly_level"] = 100.0
 
-if not X.empty:
-    X_scaled = scaler.fit_transform(X)
+if not X_egitim.empty:
+    X_egitim_scaled = scaler.fit_transform(X_egitim)
+    X_scaled = scaler.transform(X)
 
-    model.fit(X_scaled)
+    model.fit(X_egitim_scaled)
 
-    valid_predictions = model.predict(X_scaled)
-    # decision_function: pozitif -> sınırın içinde (normal),
-    # negatif -> sınırın dışında (anomali).
-    valid_scores = model.decision_function(X_scaled)
+    tahmin = model.predict(X_scaled)
+    # decision_function: pozitif -> sinirin icinde (normal),
+    # negatif -> sinirin disinda (anomali).
+    skor = model.decision_function(X_scaled)
 
-    df.loc[valid_model_mask, "prediction"] = valid_predictions
-    df.loc[valid_model_mask, "is_anomaly"] = valid_predictions == -1
-    df.loc[valid_model_mask, "svm_score"] = valid_scores
+    df.loc[X.index, "prediction"] = tahmin
+    df.loc[X.index, "is_anomaly"] = tahmin == -1
+    df.loc[X.index, "svm_score"] = skor
 
-    raw_anomaly = -valid_scores
+    raw_anomaly = -skor
     minimum = raw_anomaly.min()
     maximum = raw_anomaly.max()
 
     if maximum != minimum:
-        valid_anomaly_level = (
+        anomaly_level = (
             (raw_anomaly - minimum)
             / (maximum - minimum)
         ) * 100
     else:
-        valid_anomaly_level = np.zeros(len(X))
+        anomaly_level = np.zeros(len(X))
 
-    df.loc[valid_model_mask, "anomaly_level"] = valid_anomaly_level
+    df.loc[X.index, "anomaly_level"] = anomaly_level
 
 df["anomaly_level"] = (
     df["anomaly_level"]
@@ -68,22 +69,25 @@ print(
         [
             "kayit_id",
             "fatura_no",
-            "cift_grup_id",
-            "aciklama_kategorisi",
-            "onay_durumu",
-            "grup_buyuklugu",
-            "aciklama_risk",
-            "onay_risk",
+            "split",
+            "is_kolu",
+            "satici_unvan",
+            "genel_toplam",
+            "genel_toplam_log",
+            "is_kolu_sapma_log",
+            "toplam_tutarsizligi_log",
+            "satir_toplam_tutarsizligi_log",
+            "gelecek_tarihli",
+            "yasakli_kategori_var",
+            "kategori_uyumsuzlugu_var",
+            "vkn_format_anomalisi",
             "data_quality_anomaly",
             "anomaly_level",
             "svm_score",
-            "is_anomaly",
-            "is_anomali"
+            "is_anomaly"
         ]
     ].head(30)
 )
-
-evaluate_against_ground_truth(result, "One-Class SVM")
 
 result.to_csv(
     "one_class_svm_result.csv",
