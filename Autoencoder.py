@@ -6,22 +6,6 @@ from sklearn.preprocessing import StandardScaler
 #------------------------------------------------
 #AUTOENCODER MODELI
 #------------------------------------------------
-# Autoencoder, X'i kendi kendine yeniden üretmeye (reconstruct) çalışan bir
-# sinir ağıdır: girdi -> sıkıştırma (encoder) -> darboğaz -> geri açma
-# (decoder) -> çıktı. Ağ, normal kayıtların örüntüsünü öğrenip düşük hatayla
-# yeniden üretebildiği için normal örüntüye uymayan (anomali) kayıtlarda
-# yeniden üretim hatası (reconstruction error) belirgin şekilde yükselir.
-# Bu hata, Isolation Forest'taki if_score'un karşılığı olarak kullanılıyor.
-#
-# TensorFlow/PyTorch bu ortamda kurulu olmadığından, scikit-learn'ün
-# MLPRegressor'ı ile hafif bir autoencoder kuruluyor: girdi katmanı X'i,
-# çıktı katmanı da yine X'i hedefliyor (fit(X, X)), aradaki tek gizli
-# katman (2 nörön) darboğaz görevi görüyor. 3 özellikli küçük bir veri
-# setinde daha derin bir mimari gereksiz karmaşıklık katardı.
-#
-# contamination, Isolation Forest ile aynı (0.02) tutuluyor; böylece iki
-# modelin işaretlediği anomali SAYISI karşılaştırılabilir kalıyor.
-
 contamination = 0.02
 
 scaler = StandardScaler()
@@ -91,21 +75,24 @@ result = df.sort_values(
 print(
     result[
         [
-            "file_name",
-            "company",
-            "company_normalized",
-            "date_original",
-            "total",
-            "total_log",
-            "company_deviation_log",
-            "days_since_latest",
+            "kayit_id",
+            "fatura_no",
+            "cift_grup_id",
+            "aciklama_kategorisi",
+            "onay_durumu",
+            "grup_buyuklugu",
+            "aciklama_risk",
+            "onay_risk",
             "data_quality_anomaly",
             "anomaly_level",
             "ae_score",
-            "is_anomaly"
+            "is_anomaly",
+            "is_anomali"
         ]
     ].head(30)
 )
+
+evaluate_against_ground_truth(result, "Autoencoder")
 
 result.to_csv(
     "autoencoder_result.csv",

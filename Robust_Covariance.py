@@ -5,22 +5,6 @@ from sklearn.covariance import EllipticEnvelope
 #------------------------------------------------
 #ROBUST COVARIANCE (ELLIPTIC ENVELOPE) MODELI
 #------------------------------------------------
-# Bu yöntem, verinin çok değişkenli normal (Gauss) dağılıma uyduğunu
-# varsayar ve Minimum Covariance Determinant (MCD) ile aykırı değerlerden
-# etkilenmeyecek şekilde "sağlam" (robust) bir ortalama ve kovaryans
-# matrisi tahmin eder. Her kaydın bu sağlam merkeze olan Mahalanobis
-# mesafesi hesaplanır; merkeze göre beklenenden çok uzak kayıtlar anomali
-# sayılır.
-#
-# Mahalanobis mesafesi kovaryans matrisini kullanarak hesaplandığı için
-# ölçekten bağımsızdır (bir feature'ı sabitle çarpmak sonucu değiştirmez);
-# bu yüzden LOF/One-Class SVM'in aksine StandardScaler'a ihtiyaç yok,
-# tıpkı Isolation Forest'ta olduğu gibi ham X kullanılıyor.
-#
-# Not: Bu yöntem diğer üç modelden farklı olarak features'ın gerçekten
-# elips biçimli (normale yakın) bir dağılımı olduğunu varsayar; çarpık
-# veya çok kümeli dağılımlarda diğer modellere göre daha az güvenilir
-# olabilir.
 
 contamination = 0.02
 
@@ -76,21 +60,24 @@ result = df.sort_values(
 print(
     result[
         [
-            "file_name",
-            "company",
-            "company_normalized",
-            "date_original",
-            "total",
-            "total_log",
-            "company_deviation_log",
-            "days_since_latest",
+            "kayit_id",
+            "fatura_no",
+            "cift_grup_id",
+            "aciklama_kategorisi",
+            "onay_durumu",
+            "grup_buyuklugu",
+            "aciklama_risk",
+            "onay_risk",
             "data_quality_anomaly",
             "anomaly_level",
             "cov_score",
-            "is_anomaly"
+            "is_anomaly",
+            "is_anomali"
         ]
     ].head(30)
 )
+
+evaluate_against_ground_truth(result, "Robust Covariance")
 
 result.to_csv(
     "robust_covariance_result.csv",

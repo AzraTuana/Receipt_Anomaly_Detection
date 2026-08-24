@@ -6,16 +6,6 @@ from sklearn.preprocessing import StandardScaler
 #------------------------------------------------
 #ONE-CLASS SVM MODELI
 #------------------------------------------------
-# One-Class SVM, "normal" kayıtların çoğunu içine alan bir sınır (RBF
-# çekirdeğiyle doğrusal olmayan bir sınır) öğrenir; bu sınırın dışında
-# kalan kayıtlar anomali sayılır. contamination yerine `nu` parametresi
-# kullanılır: nu, eğitim hatalarının oranına üst sınır ve destek
-# vektörlerinin oranına alt sınır koyar; contamination ile birebir aynı
-# garanti olmasa da benzer bir rol oynar, bu yüzden diğer modellerle
-# karşılaştırılabilir olsun diye aynı değer (0.02) kullanılıyor.
-#
-# RBF çekirdeği de LOF gibi mesafeye dayalı olduğundan features arasındaki
-# ölçek farkı sonucu domine eder; StandardScaler ile ölçeklendirme şart.
 
 nu = 0.02
 
@@ -76,21 +66,24 @@ result = df.sort_values(
 print(
     result[
         [
-            "file_name",
-            "company",
-            "company_normalized",
-            "date_original",
-            "total",
-            "total_log",
-            "company_deviation_log",
-            "days_since_latest",
+            "kayit_id",
+            "fatura_no",
+            "cift_grup_id",
+            "aciklama_kategorisi",
+            "onay_durumu",
+            "grup_buyuklugu",
+            "aciklama_risk",
+            "onay_risk",
             "data_quality_anomaly",
             "anomaly_level",
             "svm_score",
-            "is_anomaly"
+            "is_anomaly",
+            "is_anomali"
         ]
     ].head(30)
 )
+
+evaluate_against_ground_truth(result, "One-Class SVM")
 
 result.to_csv(
     "one_class_svm_result.csv",

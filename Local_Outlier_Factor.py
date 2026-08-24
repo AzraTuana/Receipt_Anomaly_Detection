@@ -6,24 +6,6 @@ from sklearn.preprocessing import StandardScaler
 #------------------------------------------------
 #LOCAL OUTLIER FACTOR (LOF) MODELI
 #------------------------------------------------
-# LOF, her kaydın yerel komşuluğuna göre ne kadar "seyrek" bir bölgede
-# olduğunu ölçer: bir noktanın komşularının yoğunluğu, o komşuların kendi
-# komşularının yoğunluğuyla karşılaştırılır. Kendi çevresine göre belirgin
-# şekilde daha seyrek bir bölgede kalan kayıtlar anomali sayılır. Isolation
-# Forest'tan farkı, global değil YEREL bir kıyaslama yapması: farklı
-# yoğunluktaki kümeler (ör. sık tekrar eden vs. nadir işletmeler) bir arada
-# olsa bile her kayıt kendi komşuluğuna göre değerlendirilir.
-#
-# LOF, komşuluk hesabı için Öklid mesafesi kullanır; bu yüzden features
-# arasındaki ölçek farkı (days_since_latest yüzlerce/binlerce iken
-# total_log ve company_deviation_log birkaç birimlik aralıkta) sonucu
-# tek başına domine eder. Bu yüzden StandardScaler ile ölçeklendirme
-# şart (Isolation Forest'ta ağaç tabanlı bölünme ölçekten etkilenmediği
-# için buna gerek yoktu).
-#
-# novelty=False (varsayılan) modunda LOF sadece fit_predict destekler;
-# ayrı bir predict() yoktur çünkü model "yeni" veri üzerinde değil,
-# eğitildiği verinin kendi içindeki yerel yoğunluk farklarını ölçer.
 
 contamination = 0.02
 
@@ -82,21 +64,24 @@ result = df.sort_values(
 print(
     result[
         [
-            "file_name",
-            "company",
-            "company_normalized",
-            "date_original",
-            "total",
-            "total_log",
-            "company_deviation_log",
-            "days_since_latest",
+            "kayit_id",
+            "fatura_no",
+            "cift_grup_id",
+            "aciklama_kategorisi",
+            "onay_durumu",
+            "grup_buyuklugu",
+            "aciklama_risk",
+            "onay_risk",
             "data_quality_anomaly",
             "anomaly_level",
             "lof_score",
-            "is_anomaly"
+            "is_anomaly",
+            "is_anomali"
         ]
     ].head(30)
 )
+
+evaluate_against_ground_truth(result, "Local Outlier Factor")
 
 result.to_csv(
     "lof_result.csv",
