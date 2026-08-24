@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 #------------------------------------------------
 #AUTOENCODER MODELI
 #------------------------------------------------
-contamination = 0.02
+contamination = 0.28
 
 scaler = StandardScaler()
 
@@ -97,6 +97,8 @@ print(
         ]
     ].head(30)
 )
+
+anomali_oranini_raporla(df, X.index, "Autoencoder")
 
 result.to_csv(
     "autoencoder_result.csv",

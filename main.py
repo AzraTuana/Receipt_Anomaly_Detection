@@ -120,3 +120,13 @@ df["data_quality_anomaly"] = invalid_feature_data
 valid_mask = ~df["data_quality_anomaly"]
 X_egitim = df.loc[egitim_mask & valid_mask, FEATURE_COLUMNS]
 X = df.loc[valid_mask, FEATURE_COLUMNS]
+
+
+def anomali_oranini_raporla(df: pd.DataFrame, skorlanan_index: pd.Index, model_adi: str) -> None:
+    skorlanan = df.loc[skorlanan_index]
+    toplam_oran = skorlanan["is_anomaly"].mean() * 100
+
+    print(f"\n[{model_adi}] anomali orani: %{toplam_oran:.2f} ({skorlanan['is_anomaly'].sum()} / {len(skorlanan)} kayit)")
+    for split_adi, grup in skorlanan.groupby("split"):
+        oran = grup["is_anomaly"].mean() * 100
+        print(f"  {split_adi}: %{oran:.2f} ({grup['is_anomaly'].sum()} / {len(grup)} kayit)")
