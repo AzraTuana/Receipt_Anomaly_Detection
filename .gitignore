@@ -1,0 +1,19 @@
+# Python sanal ortamı
+.venv/
+venv/
+
+# Python geçici dosyaları
+__pycache__/
+*.py[cod]
+
+# PyCharm ayarları
+.idea/
+
+# Üretilen model sonuçları
+*_result.csv
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
+
+json_files/
