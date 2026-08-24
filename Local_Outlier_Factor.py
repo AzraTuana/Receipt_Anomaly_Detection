@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 #LOCAL OUTLIER FACTOR (LOF) MODELI
 #------------------------------------------------
 
-contamination = 0.02
+contamination = 0.28
 
 scaler = StandardScaler()
 
@@ -92,6 +92,8 @@ print(
         ]
     ].head(30)
 )
+
+anomali_oranini_raporla(df, X.index, "Local Outlier Factor")
 
 result.to_csv(
     "lof_result.csv",

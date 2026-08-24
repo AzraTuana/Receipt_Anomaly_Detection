@@ -9,7 +9,7 @@ from sklearn.ensemble import IsolationForest
 
 model = IsolationForest(
     n_estimators=300,
-    contamination=0.02,
+    contamination=0.28,
     random_state=42,
     n_jobs=-1
 )
@@ -80,6 +80,8 @@ print(
         ]
     ].head(30)
 )
+
+anomali_oranini_raporla(df, X.index, "Isolation Forest")
 
 result.to_csv(
     "isolation_forest_result.csv",

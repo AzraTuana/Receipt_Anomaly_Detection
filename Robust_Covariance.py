@@ -6,7 +6,7 @@ from sklearn.covariance import EllipticEnvelope
 #ROBUST COVARIANCE (ELLIPTIC ENVELOPE) MODELI
 #------------------------------------------------
 
-contamination = 0.02
+contamination = 0.28
 
 model = EllipticEnvelope(
     contamination=contamination,
@@ -81,6 +81,8 @@ print(
         ]
     ].head(30)
 )
+
+anomali_oranini_raporla(df, X.index, "Robust Covariance")
 
 result.to_csv(
     "robust_covariance_result.csv",

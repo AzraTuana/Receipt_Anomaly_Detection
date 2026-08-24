@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 #ONE-CLASS SVM MODELI
 #------------------------------------------------
 
-nu = 0.02
+nu = 0.28
 
 scaler = StandardScaler()
 
@@ -88,6 +88,8 @@ print(
         ]
     ].head(30)
 )
+
+anomali_oranini_raporla(df, X.index, "One-Class SVM")
 
 result.to_csv(
     "one_class_svm_result.csv",
