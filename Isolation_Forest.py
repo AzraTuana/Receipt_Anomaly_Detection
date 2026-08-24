@@ -66,21 +66,24 @@ result = df.sort_values(
 print(
     result[
         [
-            "file_name",
-            "company",
-            "company_normalized",
-            "date_original",
-            "total",
-            "total_log",
-            "company_deviation_log",
-            "days_since_latest",
+            "kayit_id",
+            "fatura_no",
+            "cift_grup_id",
+            "aciklama_kategorisi",
+            "onay_durumu",
+            "grup_buyuklugu",
+            "aciklama_risk",
+            "onay_risk",
             "data_quality_anomaly",
             "anomaly_level",
             "if_score",
-            "is_anomaly"
+            "is_anomaly",
+            "is_anomali"
         ]
     ].head(30)
 )
+
+evaluate_against_ground_truth(result, "Isolation Forest")
 
 result.to_csv(
     "isolation_forest_result.csv",

@@ -1,105 +1,71 @@
 import json
-import re
 from pathlib import Path
 import numpy as np
 import pandas as pd
+from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 
 
 JSON_FOLDER = Path(__file__).parent / "json_files"
-REQUIRED_COLUMNS = ["company", "date", "total", "address"]
-FEATURE_COLUMNS = ["total_log", "company_deviation_log", "days_since_latest"]
-VALID_YEAR_RANGE = (2020, 2030)
+REQUIRED_COLUMNS = ["fatura_no", "cift_grup_id", "aciklama_kategorisi", "onay_durumu"]
+FEATURE_COLUMNS = ["grup_buyuklugu", "aciklama_risk", "onay_risk"]
+
+# Sıralamalar hem anlamsal olarak hem de gözlemlenen anomali oranlarıyla tutarlı:
+# aciklama_kategorisi -> yeterli %5.9, yetersiz %31.6, ai_uretimi/manipulatif ~%67
+# onay_durumu -> onaylandi %1.9, gozden_gecirilecek %12.7, onaylanmadi %100
+ACIKLAMA_RISK_SIRASI = {"yeterli": 0, "yetersiz": 1, "ai_uretimi": 2, "manipulatif": 3}
+ONAY_RISK_SIRASI = {"onaylandi": 0, "gozden_gecirilecek": 1, "onaylanmadi": 2}
 
 
-def load_receipts(folder: Path) -> pd.DataFrame:
+def load_kayitlar(folder: Path) -> pd.DataFrame:
     rows = []
 
     for path in sorted(folder.rglob("*.json")):
         with path.open(encoding="utf-8") as file:
-            receipt = json.load(file)
+            kayit = json.load(file)
 
-        rows.append({**receipt, "file_name": path.name})
+        rows.append({**kayit, "file_name": path.name})
 
-    receipts = pd.DataFrame(rows)
+    kayitlar = pd.DataFrame(rows)
 
     for column in REQUIRED_COLUMNS:
-        if column not in receipts:
-            receipts[column] = pd.NA
+        if column not in kayitlar:
+            kayitlar[column] = pd.NA
 
-    return receipts
-
-
-def parse_total(value: object) -> float | None:
-    if pd.isna(value):
-        return None
-
-    text = str(value).replace(" ", "").strip()
-    if not text:
-        return None
-
-    if "," in text and "." in text:
-        if text.rfind(",") > text.rfind("."):
-            text = text.replace(".", "").replace(",", ".")
-        else:
-            text = text.replace(",", "")
-    elif "," in text:
-        text = text.replace(",", ".")
-    elif text.count(".") > 1:
-        integer, decimal = text.rsplit(".", 1)
-        text = f"{integer.replace('.', '')}.{decimal}"
-
-    try:
-        return float(text)
-    except ValueError:
-        return None
+    return kayitlar
 
 
-def normalize_company(value: object) -> str | None:
-    if pd.isna(value):
-        return None
+def evaluate_against_ground_truth(sonuc: pd.DataFrame, model_adi: str) -> None:
+    gercek = sonuc["is_anomali"]
+    tahmin = sonuc["is_anomaly"]
 
-    company = re.sub(r"[İIıi]", "I", str(value).strip()).upper()
-    company = re.sub(r"[.,]", "", company)
-    company = re.sub(r"\s+", " ", company).strip()
-    return company or None
+    tn, fp, fn, tp = confusion_matrix(gercek, tahmin).ravel()
+    precision = precision_score(gercek, tahmin, zero_division=0)
+    recall = recall_score(gercek, tahmin, zero_division=0)
+    f1 = f1_score(gercek, tahmin, zero_division=0)
+
+    print(f"\n[{model_adi}] gercek etikete gore degerlendirme")
+    print(f"  TP={tp} FP={fp} TN={tn} FN={fn}")
+    print(f"  precision={precision:.3f} recall={recall:.3f} f1={f1:.3f}")
 
 
-df = load_receipts(JSON_FOLDER)
+df = load_kayitlar(JSON_FOLDER)
 
-df["total_original"] = df["total"]
-df["total"] = df["total"].apply(parse_total)
+if df.empty:
+    raise FileNotFoundError(
+        f"'{JSON_FOLDER}' klasorunde hic kayit json dosyasi bulunamadi."
+    )
 
-df["date_original"] = df["date"]
-df["date"] = pd.to_datetime(
-    df["date"],
-    dayfirst=True,
-    errors="coerce",
-    format="mixed",
-)
-df["date"] = df["date"].where(
-    df["date"].dt.year.between(*VALID_YEAR_RANGE)
-)
+df["grup_no"] = df["cift_grup_id"].astype(str).str.split(":").str[0]
+df["grup_buyuklugu"] = df.groupby("grup_no")["grup_no"].transform("size")
+df.loc[df["cift_grup_id"].isna(), "grup_buyuklugu"] = np.nan
 
-df["days_since_latest"] = (df["date"].max() - df["date"]).dt.days
-df["company_normalized"] = df["company"].apply(normalize_company)
-
-company_stats = df.groupby("company_normalized")["total"].agg(["median", "size"])
-company_stats.loc[company_stats["size"] < 2, "median"] = df["total"].median()
-company_reference_total = df["company_normalized"].map(company_stats["median"])
-
-df["total_log"] = np.log1p(df["total"])
-df["company_deviation_log"] = np.log(
-    (df["total"] + 1) / (company_reference_total + 1)
-)
+df["aciklama_risk"] = df["aciklama_kategorisi"].map(ACIKLAMA_RISK_SIRASI)
+df["onay_risk"] = df["onay_durumu"].map(ONAY_RISK_SIRASI)
 
 missing_required_data = df[REQUIRED_COLUMNS].isna().any(axis=1)
-invalid_feature_data = ~np.isfinite(df[FEATURE_COLUMNS]).all(axis=1)
+invalid_feature_data = ~np.isfinite(df[FEATURE_COLUMNS].astype(float)).all(axis=1)
 
-df["data_quality_anomaly"] = (
-    missing_required_data
-    | df["company_normalized"].isna()
-    | invalid_feature_data
-)
+df["data_quality_anomaly"] = missing_required_data | invalid_feature_data
 
 valid_model_mask = ~df["data_quality_anomaly"]
 X = df.loc[valid_model_mask, FEATURE_COLUMNS]
