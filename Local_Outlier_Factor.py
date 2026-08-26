@@ -3,7 +3,7 @@ from main import *
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import StandardScaler
 
-contamination = 0.28
+contamination = EGITIM_ANOMALI_ORANI
 
 scaler = StandardScaler()
 

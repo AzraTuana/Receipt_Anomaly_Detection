@@ -3,7 +3,7 @@ from main import *
 from sklearn.svm import OneClassSVM
 from sklearn.preprocessing import StandardScaler
 
-nu = 0.28
+nu = EGITIM_ANOMALI_ORANI
 
 scaler = StandardScaler()
 

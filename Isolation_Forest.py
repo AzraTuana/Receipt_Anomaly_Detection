@@ -4,7 +4,7 @@ from sklearn.ensemble import IsolationForest
 
 model = IsolationForest(
     n_estimators=300,
-    contamination=0.28,
+    contamination=EGITIM_ANOMALI_ORANI,
     random_state=42,
     n_jobs=-1
 )
@@ -15,9 +15,9 @@ df["if_score"] = np.nan
 df["anomaly_level"] = 0.0
 
 if not X_egitim.empty:
-    model.fit(X_egitim)
+    model.fit(df.loc[X_egitim.index, SAPMA_FEATURE_COLUMNS])
 
-    skor = model.decision_function(X)
+    skor = model.decision_function(df.loc[X.index, SAPMA_FEATURE_COLUMNS])
 
     df.loc[X.index, "if_score"] = skor
 

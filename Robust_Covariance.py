@@ -3,14 +3,8 @@ from main import *
 from sklearn.covariance import EllipticEnvelope
 from sklearn.preprocessing import StandardScaler
 
-contamination = 0.28
+contamination = EGITIM_ANOMALI_ORANI
 
-ROBUST_FEATURE_COLUMNS = [
-    "genel_toplam_log",
-    "is_kolu_sapma_log",
-    "birim_fiyat_yuksek_sapma_log",
-    "birim_fiyat_dusuk_sapma_log",
-]
 scaler = StandardScaler()
 
 model = EllipticEnvelope(
@@ -25,8 +19,8 @@ df["cov_score"] = np.nan
 df["anomaly_level"] = 0.0
 
 if not X_egitim.empty:
-    X_egitim_robust = scaler.fit_transform(df.loc[X_egitim.index, ROBUST_FEATURE_COLUMNS])
-    X_robust = scaler.transform(df.loc[X.index, ROBUST_FEATURE_COLUMNS])
+    X_egitim_robust = scaler.fit_transform(df.loc[X_egitim.index, SAPMA_FEATURE_COLUMNS])
+    X_robust = scaler.transform(df.loc[X.index, SAPMA_FEATURE_COLUMNS])
     model.fit(X_egitim_robust)
 
     skor = model.decision_function(X_robust)

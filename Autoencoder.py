@@ -3,7 +3,7 @@ from main import *
 from sklearn.neural_network import MLPRegressor
 from sklearn.preprocessing import StandardScaler
 
-contamination = 0.28
+contamination = EGITIM_ANOMALI_ORANI
 
 scaler = StandardScaler()
 
@@ -24,8 +24,8 @@ df["ae_score"] = np.nan
 df["anomaly_level"] = 0.0
 
 if not X_egitim.empty:
-    X_egitim_scaled = scaler.fit_transform(X_egitim)
-    X_scaled = scaler.transform(X)
+    X_egitim_scaled = scaler.fit_transform(df.loc[X_egitim.index, SAPMA_FEATURE_COLUMNS])
+    X_scaled = scaler.transform(df.loc[X.index, SAPMA_FEATURE_COLUMNS])
 
     autoencoder.fit(X_egitim_scaled, X_egitim_scaled)
 
