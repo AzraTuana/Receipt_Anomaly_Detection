@@ -1,0 +1,253 @@
+﻿model,split,anomali_turu,gercek_anomali,yakalanan_anomali,recall
+Isolation Forest,dogrulama,ara_toplam,78,78,1.0
+Robust Covariance,dogrulama,ara_toplam,78,78,1.0
+One-Class SVM,dogrulama,ara_toplam,78,78,1.0
+Local Outlier Factor,dogrulama,ara_toplam,78,78,1.0
+Autoencoder,dogrulama,ara_toplam,78,78,1.0
+Kesin Kural Katmani,dogrulama,ara_toplam,78,78,1.0
+Isolation Forest,dogrulama,dusuk_ondalik_kaymasi,79,30,0.3797
+Robust Covariance,dogrulama,dusuk_ondalik_kaymasi,79,52,0.6582
+One-Class SVM,dogrulama,dusuk_ondalik_kaymasi,79,43,0.5443
+Local Outlier Factor,dogrulama,dusuk_ondalik_kaymasi,79,7,0.0886
+Autoencoder,dogrulama,dusuk_ondalik_kaymasi,79,55,0.6962
+Kesin Kural Katmani,dogrulama,dusuk_ondalik_kaymasi,79,7,0.0886
+Isolation Forest,dogrulama,fatura_no_cakismasi,110,110,1.0
+Robust Covariance,dogrulama,fatura_no_cakismasi,110,110,1.0
+One-Class SVM,dogrulama,fatura_no_cakismasi,110,110,1.0
+Local Outlier Factor,dogrulama,fatura_no_cakismasi,110,110,1.0
+Autoencoder,dogrulama,fatura_no_cakismasi,110,110,1.0
+Kesin Kural Katmani,dogrulama,fatura_no_cakismasi,110,110,1.0
+Isolation Forest,dogrulama,footer_kismi,161,161,1.0
+Robust Covariance,dogrulama,footer_kismi,161,161,1.0
+One-Class SVM,dogrulama,footer_kismi,161,161,1.0
+Local Outlier Factor,dogrulama,footer_kismi,161,161,1.0
+Autoencoder,dogrulama,footer_kismi,161,161,1.0
+Kesin Kural Katmani,dogrulama,footer_kismi,161,161,1.0
+Isolation Forest,dogrulama,gecersiz_kimlik_no,78,41,0.5256
+Robust Covariance,dogrulama,gecersiz_kimlik_no,78,12,0.1538
+One-Class SVM,dogrulama,gecersiz_kimlik_no,78,40,0.5128
+Local Outlier Factor,dogrulama,gecersiz_kimlik_no,78,12,0.1538
+Autoencoder,dogrulama,gecersiz_kimlik_no,78,14,0.1795
+Kesin Kural Katmani,dogrulama,gecersiz_kimlik_no,78,12,0.1538
+Isolation Forest,dogrulama,gelecek_tarihli,78,78,1.0
+Robust Covariance,dogrulama,gelecek_tarihli,78,78,1.0
+One-Class SVM,dogrulama,gelecek_tarihli,78,78,1.0
+Local Outlier Factor,dogrulama,gelecek_tarihli,78,78,1.0
+Autoencoder,dogrulama,gelecek_tarihli,78,78,1.0
+Kesin Kural Katmani,dogrulama,gelecek_tarihli,78,78,1.0
+Isolation Forest,dogrulama,genel_toplam,78,78,1.0
+Robust Covariance,dogrulama,genel_toplam,78,78,1.0
+One-Class SVM,dogrulama,genel_toplam,78,78,1.0
+Local Outlier Factor,dogrulama,genel_toplam,78,78,1.0
+Autoencoder,dogrulama,genel_toplam,78,78,1.0
+Kesin Kural Katmani,dogrulama,genel_toplam,78,78,1.0
+Isolation Forest,dogrulama,is_kolu_kategori_uyumsuzlugu,79,79,1.0
+Robust Covariance,dogrulama,is_kolu_kategori_uyumsuzlugu,79,65,0.8228
+One-Class SVM,dogrulama,is_kolu_kategori_uyumsuzlugu,79,79,1.0
+Local Outlier Factor,dogrulama,is_kolu_kategori_uyumsuzlugu,79,42,0.5316
+Autoencoder,dogrulama,is_kolu_kategori_uyumsuzlugu,79,72,0.9114
+Kesin Kural Katmani,dogrulama,is_kolu_kategori_uyumsuzlugu,79,42,0.5316
+Isolation Forest,dogrulama,kdv_tutari,78,78,1.0
+Robust Covariance,dogrulama,kdv_tutari,78,78,1.0
+One-Class SVM,dogrulama,kdv_tutari,78,78,1.0
+Local Outlier Factor,dogrulama,kdv_tutari,78,78,1.0
+Autoencoder,dogrulama,kdv_tutari,78,78,1.0
+Kesin Kural Katmani,dogrulama,kdv_tutari,78,78,1.0
+Isolation Forest,dogrulama,limit_asimi,79,58,0.7342
+Robust Covariance,dogrulama,limit_asimi,79,70,0.8861
+One-Class SVM,dogrulama,limit_asimi,79,63,0.7975
+Local Outlier Factor,dogrulama,limit_asimi,79,7,0.0886
+Autoencoder,dogrulama,limit_asimi,79,43,0.5443
+Kesin Kural Katmani,dogrulama,limit_asimi,79,7,0.0886
+Isolation Forest,dogrulama,mukerrer_fis_yukleme,176,176,1.0
+Robust Covariance,dogrulama,mukerrer_fis_yukleme,176,176,1.0
+One-Class SVM,dogrulama,mukerrer_fis_yukleme,176,176,1.0
+Local Outlier Factor,dogrulama,mukerrer_fis_yukleme,176,176,1.0
+Autoencoder,dogrulama,mukerrer_fis_yukleme,176,176,1.0
+Kesin Kural Katmani,dogrulama,mukerrer_fis_yukleme,176,176,1.0
+Isolation Forest,dogrulama,ondalik_kaymasi,78,54,0.6923
+Robust Covariance,dogrulama,ondalik_kaymasi,78,67,0.859
+One-Class SVM,dogrulama,ondalik_kaymasi,78,55,0.7051
+Local Outlier Factor,dogrulama,ondalik_kaymasi,78,5,0.0641
+Autoencoder,dogrulama,ondalik_kaymasi,78,42,0.5385
+Kesin Kural Katmani,dogrulama,ondalik_kaymasi,78,4,0.0513
+Isolation Forest,dogrulama,satir_toplami,78,78,1.0
+Robust Covariance,dogrulama,satir_toplami,78,78,1.0
+One-Class SVM,dogrulama,satir_toplami,78,78,1.0
+Local Outlier Factor,dogrulama,satir_toplami,78,78,1.0
+Autoencoder,dogrulama,satir_toplami,78,78,1.0
+Kesin Kural Katmani,dogrulama,satir_toplami,78,78,1.0
+Isolation Forest,dogrulama,yasakli_kategori,78,78,1.0
+Robust Covariance,dogrulama,yasakli_kategori,78,65,0.8333
+One-Class SVM,dogrulama,yasakli_kategori,78,78,1.0
+Local Outlier Factor,dogrulama,yasakli_kategori,78,65,0.8333
+Autoencoder,dogrulama,yasakli_kategori,78,74,0.9487
+Kesin Kural Katmani,dogrulama,yasakli_kategori,78,64,0.8205
+Isolation Forest,test,ara_toplam,79,79,1.0
+Robust Covariance,test,ara_toplam,79,79,1.0
+One-Class SVM,test,ara_toplam,79,79,1.0
+Local Outlier Factor,test,ara_toplam,79,79,1.0
+Autoencoder,test,ara_toplam,79,79,1.0
+Kesin Kural Katmani,test,ara_toplam,79,79,1.0
+Isolation Forest,test,dusuk_ondalik_kaymasi,78,25,0.3205
+Robust Covariance,test,dusuk_ondalik_kaymasi,78,42,0.5385
+One-Class SVM,test,dusuk_ondalik_kaymasi,78,37,0.4744
+Local Outlier Factor,test,dusuk_ondalik_kaymasi,78,5,0.0641
+Autoencoder,test,dusuk_ondalik_kaymasi,78,46,0.5897
+Kesin Kural Katmani,test,dusuk_ondalik_kaymasi,78,5,0.0641
+Isolation Forest,test,fatura_no_cakismasi,112,112,1.0
+Robust Covariance,test,fatura_no_cakismasi,112,112,1.0
+One-Class SVM,test,fatura_no_cakismasi,112,112,1.0
+Local Outlier Factor,test,fatura_no_cakismasi,112,112,1.0
+Autoencoder,test,fatura_no_cakismasi,112,112,1.0
+Kesin Kural Katmani,test,fatura_no_cakismasi,112,112,1.0
+Isolation Forest,test,footer_kismi,162,162,1.0
+Robust Covariance,test,footer_kismi,162,162,1.0
+One-Class SVM,test,footer_kismi,162,162,1.0
+Local Outlier Factor,test,footer_kismi,162,162,1.0
+Autoencoder,test,footer_kismi,162,162,1.0
+Kesin Kural Katmani,test,footer_kismi,162,162,1.0
+Isolation Forest,test,gecersiz_kimlik_no,77,40,0.5195
+Robust Covariance,test,gecersiz_kimlik_no,77,8,0.1039
+One-Class SVM,test,gecersiz_kimlik_no,77,40,0.5195
+Local Outlier Factor,test,gecersiz_kimlik_no,77,7,0.0909
+Autoencoder,test,gecersiz_kimlik_no,77,12,0.1558
+Kesin Kural Katmani,test,gecersiz_kimlik_no,77,6,0.0779
+Isolation Forest,test,gelecek_tarihli,79,79,1.0
+Robust Covariance,test,gelecek_tarihli,79,79,1.0
+One-Class SVM,test,gelecek_tarihli,79,79,1.0
+Local Outlier Factor,test,gelecek_tarihli,79,79,1.0
+Autoencoder,test,gelecek_tarihli,79,79,1.0
+Kesin Kural Katmani,test,gelecek_tarihli,79,79,1.0
+Isolation Forest,test,genel_toplam,78,78,1.0
+Robust Covariance,test,genel_toplam,78,78,1.0
+One-Class SVM,test,genel_toplam,78,78,1.0
+Local Outlier Factor,test,genel_toplam,78,78,1.0
+Autoencoder,test,genel_toplam,78,78,1.0
+Kesin Kural Katmani,test,genel_toplam,78,78,1.0
+Isolation Forest,test,is_kolu_kategori_uyumsuzlugu,78,78,1.0
+Robust Covariance,test,is_kolu_kategori_uyumsuzlugu,78,65,0.8333
+One-Class SVM,test,is_kolu_kategori_uyumsuzlugu,78,78,1.0
+Local Outlier Factor,test,is_kolu_kategori_uyumsuzlugu,78,48,0.6154
+Autoencoder,test,is_kolu_kategori_uyumsuzlugu,78,74,0.9487
+Kesin Kural Katmani,test,is_kolu_kategori_uyumsuzlugu,78,48,0.6154
+Isolation Forest,test,kdv_tutari,78,78,1.0
+Robust Covariance,test,kdv_tutari,78,78,1.0
+One-Class SVM,test,kdv_tutari,78,78,1.0
+Local Outlier Factor,test,kdv_tutari,78,78,1.0
+Autoencoder,test,kdv_tutari,78,78,1.0
+Kesin Kural Katmani,test,kdv_tutari,78,78,1.0
+Isolation Forest,test,limit_asimi,78,51,0.6538
+Robust Covariance,test,limit_asimi,78,64,0.8205
+One-Class SVM,test,limit_asimi,78,64,0.8205
+Local Outlier Factor,test,limit_asimi,78,3,0.0385
+Autoencoder,test,limit_asimi,78,45,0.5769
+Kesin Kural Katmani,test,limit_asimi,78,3,0.0385
+Isolation Forest,test,mukerrer_fis_yukleme,174,174,1.0
+Robust Covariance,test,mukerrer_fis_yukleme,174,174,1.0
+One-Class SVM,test,mukerrer_fis_yukleme,174,174,1.0
+Local Outlier Factor,test,mukerrer_fis_yukleme,174,174,1.0
+Autoencoder,test,mukerrer_fis_yukleme,174,174,1.0
+Kesin Kural Katmani,test,mukerrer_fis_yukleme,174,174,1.0
+Isolation Forest,test,ondalik_kaymasi,78,45,0.5769
+Robust Covariance,test,ondalik_kaymasi,78,60,0.7692
+One-Class SVM,test,ondalik_kaymasi,78,50,0.641
+Local Outlier Factor,test,ondalik_kaymasi,78,8,0.1026
+Autoencoder,test,ondalik_kaymasi,78,40,0.5128
+Kesin Kural Katmani,test,ondalik_kaymasi,78,7,0.0897
+Isolation Forest,test,satir_toplami,78,78,1.0
+Robust Covariance,test,satir_toplami,78,78,1.0
+One-Class SVM,test,satir_toplami,78,78,1.0
+Local Outlier Factor,test,satir_toplami,78,78,1.0
+Autoencoder,test,satir_toplami,78,78,1.0
+Kesin Kural Katmani,test,satir_toplami,78,78,1.0
+Isolation Forest,test,yasakli_kategori,79,79,1.0
+Robust Covariance,test,yasakli_kategori,79,66,0.8354
+One-Class SVM,test,yasakli_kategori,79,79,1.0
+Local Outlier Factor,test,yasakli_kategori,79,66,0.8354
+Autoencoder,test,yasakli_kategori,79,75,0.9494
+Kesin Kural Katmani,test,yasakli_kategori,79,66,0.8354
+Isolation Forest,dogrulama+test,ara_toplam,157,157,1.0
+Robust Covariance,dogrulama+test,ara_toplam,157,157,1.0
+One-Class SVM,dogrulama+test,ara_toplam,157,157,1.0
+Local Outlier Factor,dogrulama+test,ara_toplam,157,157,1.0
+Autoencoder,dogrulama+test,ara_toplam,157,157,1.0
+Kesin Kural Katmani,dogrulama+test,ara_toplam,157,157,1.0
+Isolation Forest,dogrulama+test,dusuk_ondalik_kaymasi,157,55,0.3503
+Robust Covariance,dogrulama+test,dusuk_ondalik_kaymasi,157,94,0.5987
+One-Class SVM,dogrulama+test,dusuk_ondalik_kaymasi,157,80,0.5096
+Local Outlier Factor,dogrulama+test,dusuk_ondalik_kaymasi,157,12,0.0764
+Autoencoder,dogrulama+test,dusuk_ondalik_kaymasi,157,101,0.6433
+Kesin Kural Katmani,dogrulama+test,dusuk_ondalik_kaymasi,157,12,0.0764
+Isolation Forest,dogrulama+test,fatura_no_cakismasi,222,222,1.0
+Robust Covariance,dogrulama+test,fatura_no_cakismasi,222,222,1.0
+One-Class SVM,dogrulama+test,fatura_no_cakismasi,222,222,1.0
+Local Outlier Factor,dogrulama+test,fatura_no_cakismasi,222,222,1.0
+Autoencoder,dogrulama+test,fatura_no_cakismasi,222,222,1.0
+Kesin Kural Katmani,dogrulama+test,fatura_no_cakismasi,222,222,1.0
+Isolation Forest,dogrulama+test,footer_kismi,323,323,1.0
+Robust Covariance,dogrulama+test,footer_kismi,323,323,1.0
+One-Class SVM,dogrulama+test,footer_kismi,323,323,1.0
+Local Outlier Factor,dogrulama+test,footer_kismi,323,323,1.0
+Autoencoder,dogrulama+test,footer_kismi,323,323,1.0
+Kesin Kural Katmani,dogrulama+test,footer_kismi,323,323,1.0
+Isolation Forest,dogrulama+test,gecersiz_kimlik_no,155,81,0.5226
+Robust Covariance,dogrulama+test,gecersiz_kimlik_no,155,20,0.129
+One-Class SVM,dogrulama+test,gecersiz_kimlik_no,155,80,0.5161
+Local Outlier Factor,dogrulama+test,gecersiz_kimlik_no,155,19,0.1226
+Autoencoder,dogrulama+test,gecersiz_kimlik_no,155,26,0.1677
+Kesin Kural Katmani,dogrulama+test,gecersiz_kimlik_no,155,18,0.1161
+Isolation Forest,dogrulama+test,gelecek_tarihli,157,157,1.0
+Robust Covariance,dogrulama+test,gelecek_tarihli,157,157,1.0
+One-Class SVM,dogrulama+test,gelecek_tarihli,157,157,1.0
+Local Outlier Factor,dogrulama+test,gelecek_tarihli,157,157,1.0
+Autoencoder,dogrulama+test,gelecek_tarihli,157,157,1.0
+Kesin Kural Katmani,dogrulama+test,gelecek_tarihli,157,157,1.0
+Isolation Forest,dogrulama+test,genel_toplam,156,156,1.0
+Robust Covariance,dogrulama+test,genel_toplam,156,156,1.0
+One-Class SVM,dogrulama+test,genel_toplam,156,156,1.0
+Local Outlier Factor,dogrulama+test,genel_toplam,156,156,1.0
+Autoencoder,dogrulama+test,genel_toplam,156,156,1.0
+Kesin Kural Katmani,dogrulama+test,genel_toplam,156,156,1.0
+Isolation Forest,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,157,1.0
+Robust Covariance,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,130,0.828
+One-Class SVM,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,157,1.0
+Local Outlier Factor,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,90,0.5732
+Autoencoder,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,146,0.9299
+Kesin Kural Katmani,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,90,0.5732
+Isolation Forest,dogrulama+test,kdv_tutari,156,156,1.0
+Robust Covariance,dogrulama+test,kdv_tutari,156,156,1.0
+One-Class SVM,dogrulama+test,kdv_tutari,156,156,1.0
+Local Outlier Factor,dogrulama+test,kdv_tutari,156,156,1.0
+Autoencoder,dogrulama+test,kdv_tutari,156,156,1.0
+Kesin Kural Katmani,dogrulama+test,kdv_tutari,156,156,1.0
+Isolation Forest,dogrulama+test,limit_asimi,157,109,0.6943
+Robust Covariance,dogrulama+test,limit_asimi,157,134,0.8535
+One-Class SVM,dogrulama+test,limit_asimi,157,127,0.8089
+Local Outlier Factor,dogrulama+test,limit_asimi,157,10,0.0637
+Autoencoder,dogrulama+test,limit_asimi,157,88,0.5605
+Kesin Kural Katmani,dogrulama+test,limit_asimi,157,10,0.0637
+Isolation Forest,dogrulama+test,mukerrer_fis_yukleme,350,350,1.0
+Robust Covariance,dogrulama+test,mukerrer_fis_yukleme,350,350,1.0
+One-Class SVM,dogrulama+test,mukerrer_fis_yukleme,350,350,1.0
+Local Outlier Factor,dogrulama+test,mukerrer_fis_yukleme,350,350,1.0
+Autoencoder,dogrulama+test,mukerrer_fis_yukleme,350,350,1.0
+Kesin Kural Katmani,dogrulama+test,mukerrer_fis_yukleme,350,350,1.0
+Isolation Forest,dogrulama+test,ondalik_kaymasi,156,99,0.6346
+Robust Covariance,dogrulama+test,ondalik_kaymasi,156,127,0.8141
+One-Class SVM,dogrulama+test,ondalik_kaymasi,156,105,0.6731
+Local Outlier Factor,dogrulama+test,ondalik_kaymasi,156,13,0.0833
+Autoencoder,dogrulama+test,ondalik_kaymasi,156,82,0.5256
+Kesin Kural Katmani,dogrulama+test,ondalik_kaymasi,156,11,0.0705
+Isolation Forest,dogrulama+test,satir_toplami,156,156,1.0
+Robust Covariance,dogrulama+test,satir_toplami,156,156,1.0
+One-Class SVM,dogrulama+test,satir_toplami,156,156,1.0
+Local Outlier Factor,dogrulama+test,satir_toplami,156,156,1.0
+Autoencoder,dogrulama+test,satir_toplami,156,156,1.0
+Kesin Kural Katmani,dogrulama+test,satir_toplami,156,156,1.0
+Isolation Forest,dogrulama+test,yasakli_kategori,157,157,1.0
+Robust Covariance,dogrulama+test,yasakli_kategori,157,131,0.8344
+One-Class SVM,dogrulama+test,yasakli_kategori,157,157,1.0
+Local Outlier Factor,dogrulama+test,yasakli_kategori,157,131,0.8344
+Autoencoder,dogrulama+test,yasakli_kategori,157,149,0.949
+Kesin Kural Katmani,dogrulama+test,yasakli_kategori,157,130,0.828
