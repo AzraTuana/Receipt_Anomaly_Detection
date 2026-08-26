@@ -3,23 +3,8 @@ from main import *
 from sklearn.svm import OneClassSVM
 from sklearn.preprocessing import StandardScaler
 
-#------------------------------------------------
-#ONE-CLASS SVM MODELI
-#------------------------------------------------
-# Calisma prensibi: Etiketli anomali orneklerine ihtiyac duymadan egitim
-# kayitlarini kapsayan bir karar siniri ogrenir. RBF cekirdegi kayitlari daha
-# yuksek boyutlu bir uzayda karsilastirdigi icin dogrusal olmayan bir "normal
-# bolge" kurabilir; sinirin disinda kalanlar anomali sayilir.
-# Bu projedeki kullanim alani: Fis ozelliklerinin karmasik kombinasyonlarinda
-# normal davranisin dis sinirini belirler. Global bir sinir kurdugundan yerel
-# komsuluk anomalilerine LOF kadar dogrudan odaklanmaz.
-
-# nu, egitimde anomali olabilecek kayitlar icin yaklasik ust siniri ve destek
-# vektoru payi icin alt siniri belirleyen temel karar-siniri parametresidir.
 nu = 0.28
 
-# SVM uzakliklara duyarlidir; parasal ve ikili ozelliklerin esit kosullarda
-# degerlendirilmesi icin olcekleme yalnizca egitim verisine uydurulur.
 scaler = StandardScaler()
 
 model = OneClassSVM(
@@ -28,9 +13,6 @@ model = OneClassSVM(
     gamma="scale"
 )
 
-# Eksik/gecersiz verili satirlar modele gonderilmeden dogrudan anomali
-# olarak atanir. svm_score bos kalir; cunku bu satirlar model tarafindan
-# skorlanmamistir.
 df["prediction"] = -1
 df["is_anomaly"] = True
 df["svm_score"] = np.nan
@@ -40,11 +22,8 @@ if not X_egitim.empty:
     X_egitim_scaled = scaler.fit_transform(X_egitim)
     X_scaled = scaler.transform(X)
 
-    # Model, olceklenmis egitim kayitlarini normal sinifin ornekleri kabul eder.
     model.fit(X_egitim_scaled)
 
-    # decision_function: pozitif -> sinirin icinde (normal),
-    # negatif -> sinirin disinda (anomali).
     skor = model.decision_function(X_scaled)
 
     df.loc[X.index, "svm_score"] = skor
