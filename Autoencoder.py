@@ -6,30 +6,46 @@ from sklearn.preprocessing import StandardScaler
 #------------------------------------------------
 #AUTOENCODER MODELI
 #------------------------------------------------
+# Calisma prensibi: Ag, girdiyi yine kendisi hedef olacak sekilde yeniden
+# uretmeyi ogrenir. Simetrik darbogaz katmanlari ortak ozellikleri dort boyutlu
+# bir temsile sikistirdigi icin egitimdeki baskin normal oruntuleri iyi,
+# alisilmadik kombinasyonlari ise daha yuksek yeniden uretim hatasiyla kurar.
+# Bu projedeki kullanim alani: Sabit bir dagilim sekli varsaymadan ozellikler
+# arasindaki dogrusal olmayan baglantilari ogrenip yuksek yeniden uretim hatali
+# fisleri yakalar. Egitimdeki anomaliler de ogrenilebileceginden esik ve egitim
+# verisinin temizligi sonucu dogrudan etkiler.
+
+# Egitim yeniden uretim hatalarinin en yuksek %28'lik bolumu, anomali esigini
+# belirler. Bu oran kesin usulsuzluk orani olarak yorumlanmamalidir.
 contamination = 0.28
 
+# Sinir aginin optimizasyonunu ve hata hesabini dengeli tutmak icin olcekleme
+# egitim verisine uydurulur, diger splitlere degistirilmeden uygulanir.
 scaler = StandardScaler()
 
 autoencoder = MLPRegressor(
-    hidden_layer_sizes=(2,),
+    # 17 -> 10 -> 4 -> 10 -> 17 darbogazi, modeli girdiyi kopyalamak yerine
+    # ozet oruntu ogrenmeye zorlar. MLPRegressor yeniden uretici agdir.
+    hidden_layer_sizes=(10, 4, 10),
     activation="tanh",
     solver="adam",
     max_iter=5000,
+    early_stopping=True,
+    validation_fraction=0.1,
+    n_iter_no_change=30,
     random_state=42,
 )
 
-# Eksik/gecersiz verili satirlar modele gonderilmeden dogrudan anomali
-# olarak atanir. ae_score bos kalir; cunku bu satirlar model tarafindan
-# skorlanmamistir.
 df["prediction"] = -1
 df["is_anomaly"] = True
 df["ae_score"] = np.nan
-df["anomaly_level"] = 100.0
+df["anomaly_level"] = 0.0
 
 if not X_egitim.empty:
     X_egitim_scaled = scaler.fit_transform(X_egitim)
     X_scaled = scaler.transform(X)
 
+    # Hedefin girdiye esit verilmesi autoencoder'in yeniden uretim gorevidir.
     autoencoder.fit(X_egitim_scaled, X_egitim_scaled)
 
     # Esik egitim setinin yeniden uretim hatasindan cikarilir, sonra
@@ -44,10 +60,6 @@ if not X_egitim.empty:
         axis=1
     )
 
-    tahmin = np.where(reconstruction_error > threshold, -1, 1)
-
-    df.loc[X.index, "prediction"] = tahmin
-    df.loc[X.index, "is_anomaly"] = tahmin == -1
     df.loc[X.index, "ae_score"] = reconstruction_error
 
     minimum = reconstruction_error.min()
@@ -63,6 +75,12 @@ if not X_egitim.empty:
 
     df.loc[X.index, "anomaly_level"] = anomaly_level
 
+hibrit_karari_uygula(
+    score_column="ae_score",
+    lower_scores_more_anomalous=False,
+    default_threshold=float(threshold) if not X_egitim.empty else np.inf,
+)
+
 df["anomaly_level"] = (
     df["anomaly_level"]
     .round(2)
@@ -75,32 +93,13 @@ result = df.sort_values(
 
 print(
     result[
-        [
-            "kayit_id",
-            "fatura_no",
-            "split",
-            "is_kolu",
-            "satici_unvan",
-            "genel_toplam",
-            "genel_toplam_log",
-            "is_kolu_sapma_log",
-            "toplam_tutarsizligi_log",
-            "satir_toplam_tutarsizligi_log",
-            "gelecek_tarihli",
-            "yasakli_kategori_var",
-            "kategori_uyumsuzlugu_var",
-            "vkn_format_anomalisi",
-            "data_quality_anomaly",
-            "anomaly_level",
-            "ae_score",
-            "is_anomaly"
-        ]
+        [*MODEL_REPORT_COLUMNS, "ae_score"]
     ].head(30)
 )
 
-anomali_oranini_raporla(df, X.index, "Autoencoder")
+anomali_oranini_raporla(df, df.index, "Autoencoder")
 
-result.to_csv(
+result.drop(columns=CSV_HARIC_KOLONLAR).to_csv(
     "autoencoder_result.csv",
     index=False,
     encoding="utf-8-sig"
