@@ -84,7 +84,7 @@ print(
 
 anomali_oranini_raporla(df, X.index, "Robust Covariance")
 
-result.to_csv(
+result.drop(columns=CSV_HARIC_KOLONLAR).to_csv(
     "robust_covariance_result.csv",
     index=False,
     encoding="utf-8-sig"

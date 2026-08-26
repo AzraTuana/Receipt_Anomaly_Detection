@@ -18,9 +18,6 @@ autoencoder = MLPRegressor(
     random_state=42,
 )
 
-# Eksik/gecersiz verili satirlar modele gonderilmeden dogrudan anomali
-# olarak atanir. ae_score bos kalir; cunku bu satirlar model tarafindan
-# skorlanmamistir.
 df["prediction"] = -1
 df["is_anomaly"] = True
 df["ae_score"] = np.nan
@@ -100,7 +97,7 @@ print(
 
 anomali_oranini_raporla(df, X.index, "Autoencoder")
 
-result.to_csv(
+result.drop(columns=CSV_HARIC_KOLONLAR).to_csv(
     "autoencoder_result.csv",
     index=False,
     encoding="utf-8-sig"

@@ -91,7 +91,7 @@ print(
 
 anomali_oranini_raporla(df, X.index, "One-Class SVM")
 
-result.to_csv(
+result.drop(columns=CSV_HARIC_KOLONLAR).to_csv(
     "one_class_svm_result.csv",
     index=False,
     encoding="utf-8-sig"

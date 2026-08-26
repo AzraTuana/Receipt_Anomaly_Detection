@@ -83,7 +83,7 @@ print(
 
 anomali_oranini_raporla(df, X.index, "Isolation Forest")
 
-result.to_csv(
+result.drop(columns=CSV_HARIC_KOLONLAR).to_csv(
     "isolation_forest_result.csv",
     index=False,
     encoding="utf-8-sig"

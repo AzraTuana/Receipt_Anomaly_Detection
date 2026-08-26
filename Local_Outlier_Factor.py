@@ -95,7 +95,7 @@ print(
 
 anomali_oranini_raporla(df, X.index, "Local Outlier Factor")
 
-result.to_csv(
+result.drop(columns=CSV_HARIC_KOLONLAR).to_csv(
     "lof_result.csv",
     index=False,
     encoding="utf-8-sig"

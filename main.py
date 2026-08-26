@@ -9,6 +9,8 @@ SPLIT_KLASORLERI = ["egitim", "dogrulama", "test"]
 FORBIDDEN_KATEGORILER = {"kumar", "alkol", "tutun_urunleri"}
 BEKLENEN_KATEGORI_ESIGI = 0.01
 
+CSV_HARIC_KOLONLAR = ["kalemler", "kalem_kategorileri"]
+
 FEATURE_COLUMNS = [
     "genel_toplam_log",
     "is_kolu_sapma_log",
