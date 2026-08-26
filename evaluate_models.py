@@ -356,7 +356,10 @@ def main() -> None:
     print(f"Anomali turu metrikleri: {TYPE_METRICS_OUTPUT}")
     print(f"Kayit bazli karsilastirma: {PREDICTIONS_OUTPUT}")
     print(f"Nihai siralama: {LEADERBOARD_OUTPUT}")
-    print("Egitim etiketleri kullanilmadi.")
+    print(
+        "Egitim etiketlerinin yalnizca toplu anomali orani model onseli "
+        "olarak kullanildi; satir etiketleri model fit adimina verilmedi."
+    )
 
 
 if __name__ == "__main__":

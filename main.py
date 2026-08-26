@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 JSON_ROOT = Path(__file__).parent / "json_files"
+TRAINING_LABEL_PATH = Path(__file__).parent / "text_files_doğrulama" / "egitim_etiket.json"
 VALIDATION_LABEL_PATH = Path(__file__).parent / "text_files_doğrulama" / "dogrulama_etiket.json"
 SPLIT_KLASORLERI = ["egitim", "dogrulama", "test"]
 FORBIDDEN_KATEGORILER = {"kumar", "alkol", "tutun_urunleri"}
@@ -32,6 +33,13 @@ FEATURE_COLUMNS = [
     "vkn_format_anomalisi",
     "satici_kimlik_referans_uyumsuzlugu",
     "mukerrer_fatura_var",
+]
+
+SAPMA_FEATURE_COLUMNS = [
+    "genel_toplam_log",
+    "is_kolu_sapma_log",
+    "birim_fiyat_yuksek_sapma_log",
+    "birim_fiyat_dusuk_sapma_log",
 ]
 
 RULE_FLAG_COLUMNS = {
@@ -63,6 +71,63 @@ def _sayiya_cevir(value) -> float:
         return float(value)
     except (TypeError, ValueError):
         return np.nan
+
+def load_training_anomaly_rate(training_ids: pd.Series) -> float:
+    """Model onselini yalnizca egitim etiketlerindeki toplu orandan hesaplar."""
+    if not TRAINING_LABEL_PATH.exists():
+        raise FileNotFoundError(f"Egitim etiketi bulunamadi: {TRAINING_LABEL_PATH}")
+
+    with TRAINING_LABEL_PATH.open(encoding="utf-8") as file:
+        records = json.load(file)
+
+    labels = pd.DataFrame(records)
+    required = {"kayit_id", "is_anomali"}
+    missing = required - set(labels.columns)
+    if missing:
+        raise ValueError(
+            f"{TRAINING_LABEL_PATH.name} eksik kolonlar: {sorted(missing)}"
+        )
+    if labels["kayit_id"].duplicated().any():
+        raise ValueError("Egitim etiketinde tekrar eden kayit_id bulundu.")
+    if training_ids.duplicated().any():
+        raise ValueError("Egitim girdisinde tekrar eden kayit_id bulundu.")
+
+    input_ids = set(training_ids.astype(str))
+    label_ids = set(labels["kayit_id"].astype(str))
+    if input_ids != label_ids:
+        missing_labels = sorted(input_ids - label_ids)[:10]
+        extra_labels = sorted(label_ids - input_ids)[:10]
+        raise ValueError(
+            "Egitim girdisi ile etiket kayitlari eslesmiyor. "
+            f"Etiketi eksik kayitlar: {missing_labels}; "
+            f"fazladan etiketler: {extra_labels}"
+        )
+
+    anomaly_labels = labels["is_anomali"]
+    if not pd.api.types.is_bool_dtype(anomaly_labels):
+        normalized = anomaly_labels.astype(str).str.strip().str.lower()
+        mapping = {"true": True, "1": True, "false": False, "0": False}
+        invalid = ~normalized.isin(mapping)
+        if invalid.any():
+            invalid_values = sorted(normalized.loc[invalid].unique())
+            raise ValueError(
+                "Egitim etiketinde gecersiz is_anomali degerleri var: "
+                f"{invalid_values}"
+            )
+        anomaly_labels = normalized.map(mapping)
+
+    anomaly_rate = float(anomaly_labels.mean())
+    if not 0 < anomaly_rate <= 0.5:
+        raise ValueError(
+            "Hesaplanan egitim anomali orani model contamination araligi "
+            f"disinda: {anomaly_rate:.6f}"
+        )
+
+    print(
+        "Egitim etiketlerinden hesaplanan toplu anomali orani: "
+        f"{anomaly_rate:.4f} (%{anomaly_rate * 100:.2f})"
+    )
+    return anomaly_rate
 
 def fatura_matematik_hatalari(satir: pd.Series) -> pd.Series:
     kalemler = satir.get("kalemler")
@@ -138,6 +203,9 @@ if df.empty:
     )
 
 egitim_mask = df["split"] == "egitim"
+EGITIM_ANOMALI_ORANI = load_training_anomaly_rate(
+    df.loc[egitim_mask, "kayit_id"]
+)
 
 df["genel_toplam_log"] = np.log1p(df["genel_toplam"])
 
