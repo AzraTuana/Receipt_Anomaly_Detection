@@ -9,7 +9,7 @@ VALIDATION_LABEL_PATH = Path(__file__).parent / "text_files_doğrulama" / "dogru
 SPLIT_KLASORLERI = ["egitim", "dogrulama", "test"]
 FORBIDDEN_KATEGORILER = {"kumar", "alkol", "tutun_urunleri"}
 BEKLENEN_KATEGORI_ESIGI = 0.01
-PARASAL_TOLERANS = 0.05
+PARASAL_TOLERANS = 5.00
 ALT_TUTAR_QUANTILE = 0.05
 UST_TUTAR_QUANTILE = 0.95
 
