@@ -48,6 +48,7 @@ MODEL_RESULTS = {
 METRICS_OUTPUT = PROJECT_ROOT / "model_metrics.csv"
 PREDICTIONS_OUTPUT = PROJECT_ROOT / "model_prediction_comparison.csv"
 TYPE_METRICS_OUTPUT = PROJECT_ROOT / "model_metrics_by_anomaly_type.csv"
+LEADERBOARD_OUTPUT = PROJECT_ROOT / "model_siralamasi.csv"
 
 
 def boolean_series(series: pd.Series, column_name: str) -> pd.Series:
@@ -314,6 +315,21 @@ def anomaly_type_metrics(comparison: pd.DataFrame) -> pd.DataFrame:
     return result
 
 
+def build_leaderboard(metrics_table: pd.DataFrame, split_name: str) -> pd.DataFrame:
+    """Modelleri belirtilen split'teki F1'e gore buyukten kucuge siralar."""
+    leaderboard = (
+        metrics_table
+        .loc[
+            metrics_table["split"] == split_name,
+            ["model", "precision", "recall", "f1", "accuracy"],
+        ]
+        .sort_values("f1", ascending=False)
+        .reset_index(drop=True)
+    )
+    leaderboard.insert(0, "sira", leaderboard.index + 1)
+    return leaderboard
+
+
 def main() -> None:
     labels = load_labels()
     all_metrics = []
@@ -328,6 +344,10 @@ def main() -> None:
     metric_columns = ["precision", "recall", "f1", "accuracy"]
     metrics_table[metric_columns] = metrics_table[metric_columns].round(4)
     metrics_table.to_csv(METRICS_OUTPUT, index=False, encoding="utf-8-sig")
+
+    # Nihai siralama: gorulmemis test seti performansina gore, F1 buyukten kucuge.
+    leaderboard = build_leaderboard(metrics_table, split_name="test")
+    leaderboard.to_csv(LEADERBOARD_OUTPUT, index=False, encoding="utf-8-sig")
 
     comparison_table = combine_prediction_tables(all_details)
     type_metrics_table = anomaly_type_metrics(comparison_table)
@@ -351,9 +371,12 @@ def main() -> None:
     ]
     print("\nMODEL DEGERLENDIRME SONUCLARI")
     print(metrics_table[display_columns].to_string(index=False))
+    print("\nNIHAI SIRALAMA (test seti, F1'e gore)")
+    print(leaderboard.to_string(index=False))
     print(f"\nMetrik tablosu: {METRICS_OUTPUT}")
     print(f"Anomali turu metrikleri: {TYPE_METRICS_OUTPUT}")
     print(f"Kayit bazli karsilastirma: {PREDICTIONS_OUTPUT}")
+    print(f"Nihai siralama: {LEADERBOARD_OUTPUT}")
     print("Egitim etiketleri kullanilmadi.")
 
 
