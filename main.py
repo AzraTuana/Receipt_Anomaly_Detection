@@ -3,7 +3,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-
 JSON_ROOT = Path(__file__).parent / "json_files"
 VALIDATION_LABEL_PATH = Path(__file__).parent / "text_files_doğrulama" / "dogrulama_etiket.json"
 SPLIT_KLASORLERI = ["egitim", "dogrulama", "test"]
@@ -15,30 +14,24 @@ UST_TUTAR_QUANTILE = 0.95
 
 CSV_HARIC_KOLONLAR = ["kalemler", "kalem_kategorileri"]
 
-# PROJENIN TOPLU AMACI:
-# Fis/fatura kayitlarini tek bir kurala gore reddetmek yerine mali, zamansal,
-# bicimsel ve sektorel sinyalleri birlikte inceleyerek manuel kontrole deger
-# olabilecek olagandisi kayitlari one cikarmaktir. Model dosyalarinin tamami
-# asagidaki ortak ozellikleri kullanir; dolayisiyla sonuclar "kesin usulsuzluk"
-# degil, egitim verisindeki normal oruntulerden sapma gostergesidir.
 FEATURE_COLUMNS = [
-    "genel_toplam_log",                    # Faturanin mutlak parasal buyuklugu
-    "is_kolu_sapma_log",                   # Tutarin kendi sektorunun medyanindan sapmasi
-    "is_kolu_ust_limit_sapmasi_log",       # Sektorun egitim %95 ust sinirinin asilmasi
-    "is_kolu_alt_limit_sapmasi_log",       # Sektorun egitim %5 alt sinirinin altina inilmesi
-    "birim_fiyat_yuksek_sapma_log",        # Kategori medyanindan yukari birim fiyat sapmasi
-    "birim_fiyat_dusuk_sapma_log",         # Kategori medyanindan asagi birim fiyat sapmasi
-    "toplam_tutarsizligi_log",             # Vergisiz tutar + KDV ile genel toplam farki
-    "satir_toplam_tutarsizligi_log",       # Kalem toplamlari ile genel toplam farki
-    "ara_toplam_tutarsizligi_log",         # Miktar/fiyat/iskonto ve ara toplam uyusmazligi
-    "kdv_tutarsizligi_log",                # Satir ve fatura seviyesinde KDV uyusmazligi
-    "satir_matematik_tutarsizligi_log",    # Ara toplam + KDV ile satir toplami farki
-    "gelecek_tarihli",                     # Fatura tarihinin yukleme tarihinden ileride olmasi
-    "yasakli_kategori_var",                # Kumar, alkol veya tutun urunu bulunmasi
-    "kategori_uyumsuzlugu_var",            # Kalemin ilgili is kolunda beklenmeyen kategoride olmasi
-    "vkn_format_anomalisi",                # Kimlik numarasinin 10/11 haneli sayi olmamasi
-    "satici_kimlik_referans_uyumsuzlugu",  # Ayni saticinin egitimdeki kimliginden sapmasi
-    "mukerrer_fatura_var",                 # Ayni satici VKN + fatura numarasinin tekrari
+    "genel_toplam_log",
+    "is_kolu_sapma_log",
+    "is_kolu_ust_limit_sapmasi_log",
+    "is_kolu_alt_limit_sapmasi_log",
+    "birim_fiyat_yuksek_sapma_log",
+    "birim_fiyat_dusuk_sapma_log",
+    "toplam_tutarsizligi_log",
+    "satir_toplam_tutarsizligi_log",
+    "ara_toplam_tutarsizligi_log",
+    "kdv_tutarsizligi_log",
+    "satir_matematik_tutarsizligi_log",
+    "gelecek_tarihli",
+    "yasakli_kategori_var",
+    "kategori_uyumsuzlugu_var",
+    "vkn_format_anomalisi",
+    "satici_kimlik_referans_uyumsuzlugu",
+    "mukerrer_fatura_var",
 ]
 
 RULE_FLAG_COLUMNS = {
@@ -54,7 +47,6 @@ RULE_FLAG_COLUMNS = {
     "veri_kalitesi": "data_quality_anomaly",
 }
 
-
 def load_split(folder: Path, split_adi: str) -> pd.DataFrame:
     rows = []
 
@@ -66,17 +58,13 @@ def load_split(folder: Path, split_adi: str) -> pd.DataFrame:
 
     return pd.DataFrame(rows)
 
-
 def _sayiya_cevir(value) -> float:
-    """Bozuk sayisal alanlari daha sonra veri-kalitesi anomalisi olacak sekilde isaretler."""
     try:
         return float(value)
     except (TypeError, ValueError):
         return np.nan
 
-
 def fatura_matematik_hatalari(satir: pd.Series) -> pd.Series:
-    """Kalem ve fatura seviyesindeki en buyuk mutlak parasal hatalari hesaplar."""
     kalemler = satir.get("kalemler")
     if not isinstance(kalemler, list) or not kalemler:
         return pd.Series(
@@ -120,8 +108,6 @@ def fatura_matematik_hatalari(satir: pd.Series) -> pd.Series:
     toplam_kdv = _sayiya_cevir(satir.get("toplam_kdv_tutari"))
     genel_toplam = _sayiya_cevir(satir.get("genel_toplam"))
 
-    # Hem tek bir kalemdeki bozulma hem de footer/baslik toplami uyusmazligi
-    # yakalansin diye satir-hatasi ve fatura-hatasi maksimum ile birlestirilir.
     return pd.Series(
         {
             "toplam_tutarsizligi": abs(genel_toplam - (toplam_vergisiz + toplam_kdv)),
@@ -141,7 +127,6 @@ def fatura_matematik_hatalari(satir: pd.Series) -> pd.Series:
         }
     )
 
-
 df = pd.concat(
     [load_split(JSON_ROOT / ad, ad) for ad in SPLIT_KLASORLERI],
     ignore_index=True,
@@ -152,11 +137,8 @@ if df.empty:
         f"'{JSON_ROOT}' altinda hic kayit json dosyasi bulunamadi."
     )
 
-# Referans istatistikleri ve model sinirlari yalnizca egitim bolumunden
-# ogrenilir. Dogrulama/test kayitlarini referansa katmamak veri sizintisini onler.
 egitim_mask = df["split"] == "egitim"
 
-# --- tutar/tarih tutarlilik kontrolleri ---
 df["genel_toplam_log"] = np.log1p(df["genel_toplam"])
 
 matematik_hatalari = df.apply(fatura_matematik_hatalari, axis=1)
@@ -165,8 +147,6 @@ for hata_adi in matematik_hatalari.columns:
     df[f"{hata_adi}_log"] = np.log1p(df[hata_adi])
     df[f"{hata_adi}_var"] = (df[hata_adi] > PARASAL_TOLERANS).astype(int)
 
-# yukleme_zamani ISO formatinda ("YYYY-MM-DDTHH:MM:SS+03:00") basladigi icin
-# ilk 10 karakteri fatura_tarihi ("YYYY-MM-DD") ile dogrudan karsilastirilabilir.
 df["gelecek_tarihli"] = (
     df["fatura_tarihi"] > df["yukleme_zamani"].str[:10]
 ).astype(int)
@@ -176,14 +156,11 @@ df["vkn_format_anomalisi"] = (
     ~kimlik_no.str.fullmatch(r"(?:\d{10}|\d{11})", na=False)
 ).astype(int)
 
-# Ayni satici kimligi ve fatura numarasinin birden fazla kayitta gecmesi,
-# mukerrer yuklemeyi ve ciftin ilk kaydindaki fatura-no cakismasini birlikte yakalar.
 df["mukerrer_fatura_var"] = df.duplicated(
     subset=["satici_vkn", "fatura_no"],
     keep=False,
 ).astype(int)
 
-# --- kategori tabanli kontroller (referans egitimden cikarilir) ---
 df["kalem_kategorileri"] = df["kalemler"].apply(
     lambda kalemler: [kalem["harcama_kategorisi"] for kalem in kalemler]
 )
@@ -213,18 +190,15 @@ beklenen_kategoriler = {
     for is_kolu, pay in kategori_payi.groupby(level=0)
 }
 
-
 def kategori_uyumsuz_mu(is_kolu: str, kategoriler: list) -> int:
     beklenen = beklenen_kategoriler.get(is_kolu, set())
     return int(any(k not in beklenen and k not in FORBIDDEN_KATEGORILER for k in kategoriler))
-
 
 df["kategori_uyumsuzlugu_var"] = df.apply(
     lambda satir: kategori_uyumsuz_mu(satir["is_kolu"], satir["kalem_kategorileri"]),
     axis=1,
 )
 
-# --- is_kolu bazinda tutar sapmasi (referans medyan egitimden) ---
 egitim_tutarlari = df.loc[egitim_mask].groupby("is_kolu")["genel_toplam"]
 is_kolu_medyan = egitim_tutarlari.median()
 is_kolu_alt_limit = egitim_tutarlari.quantile(ALT_TUTAR_QUANTILE)
@@ -246,9 +220,6 @@ df["is_kolu_alt_limit_sapmasi_log"] = np.maximum(
     0,
 )
 
-# Ayni satici unvaninin egitimde en sik gorulen kimlik numarasi referans kabul
-# edilir. Yeni saticilar otomatik anomali sayilmaz; yalnizca bilinen saticinin
-# kimlik degistirmesi modele bir sinyal olarak verilir.
 satici_kimlik_referansi = (
     df.loc[egitim_mask]
     .groupby("satici_unvan")["satici_vkn"]
@@ -260,8 +231,6 @@ df["satici_kimlik_referans_uyumsuzlugu"] = (
     & (df["satici_vkn"].astype(str) != beklenen_satici_kimligi.astype(str))
 ).astype(int)
 
-# Ondalik kaymalarini toplam tutardan once yakalayabilmek icin her kalemin
-# birim fiyati, kendi harcama kategorisinin egitim medyaniyla karsilastirilir.
 egitim_birim_fiyatlari = pd.DataFrame(
     [
         {
@@ -277,7 +246,6 @@ birim_fiyat_medyanlari = egitim_birim_fiyatlari.groupby("harcama_kategorisi")[
     "birim_fiyat"
 ].median()
 genel_birim_fiyat_medyan = egitim_birim_fiyatlari["birim_fiyat"].median()
-
 
 def birim_fiyat_sapmalari(kalemler: list) -> pd.Series:
     oranlar = []
@@ -302,17 +270,13 @@ def birim_fiyat_sapmalari(kalemler: list) -> pd.Series:
         }
     )
 
-
 df[["birim_fiyat_yuksek_sapma_log", "birim_fiyat_dusuk_sapma_log"]] = (
     df["kalemler"].apply(birim_fiyat_sapmalari)
 )
 
-# --- veri kalitesi / model girdisi ---
 invalid_feature_data = ~np.isfinite(df[FEATURE_COLUMNS].astype(float)).all(axis=1)
 df["data_quality_anomaly"] = invalid_feature_data
 
-# Kesin matematik/format/mukerrerlik kurallari model skorundan bagimsiz tutulur.
-# Model, bu kurallarin kapsamadigi istatistiksel anomalileri tamamlar.
 df["rule_anomaly_reasons"] = df.apply(
     lambda satir: "|".join(
         neden
@@ -352,14 +316,11 @@ MODEL_REPORT_COLUMNS = [
     "is_anomaly",
 ]
 
-
 def _f1_hesapla(true_positive: int, false_positive: int, false_negative: int) -> float:
     payda = 2 * true_positive + false_positive + false_negative
     return 0.0 if payda == 0 else (2 * true_positive) / payda
 
-
 def load_validation_ground_truth() -> pd.Series:
-    """Yalnizca karar esigi icin dogrulama etiketini okur; egitim etiketi okunmaz."""
     if not VALIDATION_LABEL_PATH.exists():
         raise FileNotFoundError(f"Dogrulama etiketi bulunamadi: {VALIDATION_LABEL_PATH}")
 
@@ -378,13 +339,11 @@ def load_validation_ground_truth() -> pd.Series:
 
     return labels.set_index("kayit_id")["is_anomali"].astype(bool)
 
-
 def kalibre_edilmis_esik(
     score_column: str,
     lower_scores_more_anomalous: bool,
     default_threshold: float,
 ) -> tuple[float, float, str]:
-    """Hibrit karar F1'ini dogrulamada en yuksek yapan model esigini bulur."""
     try:
         ground_truth = load_validation_ground_truth()
     except FileNotFoundError:
@@ -414,7 +373,6 @@ def kalibre_edilmis_esik(
     best_f1 = _f1_hesapla(true_positive, false_positive, false_negative)
     best_k = 0
 
-    # Kuralla zaten yakalanan kayitlar esik aramasinda tekrar sayilmaz.
     candidates = validation.loc[~rule_prediction].sort_values(
         score_column,
         ascending=lower_scores_more_anomalous,
@@ -438,13 +396,11 @@ def kalibre_edilmis_esik(
 
     return threshold, best_f1, "dogrulama_f1"
 
-
 def hibrit_karari_uygula(
     score_column: str,
     lower_scores_more_anomalous: bool,
     default_threshold: float,
 ) -> None:
-    """Kalibre model kararini kesin kurallarla OR birlestirip df'ye yazar."""
     threshold, validation_f1, threshold_source = kalibre_edilmis_esik(
         score_column,
         lower_scores_more_anomalous,
@@ -461,7 +417,6 @@ def hibrit_karari_uygula(
     df["is_anomaly"] = df["rule_based_anomaly"] | df["model_is_anomaly"]
     df["prediction"] = np.where(df["is_anomaly"], -1, 1)
 
-    # Kesin kural anomalileri siralama tablosunda kaybolmasin diye nihai seviye 100'dur.
     df["anomaly_level"] = np.where(
         df["rule_based_anomaly"],
         100.0,
@@ -475,7 +430,6 @@ def hibrit_karari_uygula(
         f"Kalibre esik ({score_column}): {threshold:.8g} | "
         f"kaynak={threshold_source} | validation_hibrit_f1={validation_f1:.4f}"
     )
-
 
 def anomali_oranini_raporla(df: pd.DataFrame, skorlanan_index: pd.Index, model_adi: str) -> None:
     skorlanan = df.loc[skorlanan_index]

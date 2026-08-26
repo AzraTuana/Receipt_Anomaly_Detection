@@ -1,6 +1,6 @@
 ﻿sira,model,precision,recall,f1,accuracy
-1,One-Class SVM,0.9141,0.8817,0.8976,0.9437
-2,Robust Covariance,0.9402,0.8521,0.8939,0.9434
-3,Isolation Forest,0.9076,0.8521,0.8789,0.9343
-4,Autoencoder,0.9172,0.8304,0.8716,0.9315
-5,Local Outlier Factor,0.9972,0.7032,0.8248,0.9163
+1,One-Class SVM,0.9139,0.8797,0.8965,0.9431
+2,Robust Covariance,0.94,0.8491,0.8922,0.9426
+3,Isolation Forest,0.9074,0.8501,0.8778,0.9337
+4,Autoencoder,0.9169,0.8274,0.8699,0.9307
+5,Local Outlier Factor,0.9972,0.7022,0.8241,0.916

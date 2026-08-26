@@ -20,9 +20,9 @@ Kesin Kural Katmani,dogrulama,fatura_no_cakismasi,110,110,1.0
 Isolation Forest,dogrulama,footer_kismi,161,161,1.0
 Robust Covariance,dogrulama,footer_kismi,161,161,1.0
 One-Class SVM,dogrulama,footer_kismi,161,161,1.0
-Local Outlier Factor,dogrulama,footer_kismi,161,161,1.0
+Local Outlier Factor,dogrulama,footer_kismi,161,160,0.9938
 Autoencoder,dogrulama,footer_kismi,161,161,1.0
-Kesin Kural Katmani,dogrulama,footer_kismi,161,161,1.0
+Kesin Kural Katmani,dogrulama,footer_kismi,161,160,0.9938
 Isolation Forest,dogrulama,gecersiz_kimlik_no,78,41,0.5256
 Robust Covariance,dogrulama,gecersiz_kimlik_no,78,12,0.1538
 One-Class SVM,dogrulama,gecersiz_kimlik_no,78,40,0.5128
@@ -38,21 +38,21 @@ Kesin Kural Katmani,dogrulama,gelecek_tarihli,78,78,1.0
 Isolation Forest,dogrulama,genel_toplam,78,78,1.0
 Robust Covariance,dogrulama,genel_toplam,78,78,1.0
 One-Class SVM,dogrulama,genel_toplam,78,78,1.0
-Local Outlier Factor,dogrulama,genel_toplam,78,78,1.0
+Local Outlier Factor,dogrulama,genel_toplam,78,77,0.9872
 Autoencoder,dogrulama,genel_toplam,78,78,1.0
-Kesin Kural Katmani,dogrulama,genel_toplam,78,78,1.0
+Kesin Kural Katmani,dogrulama,genel_toplam,78,77,0.9872
 Isolation Forest,dogrulama,is_kolu_kategori_uyumsuzlugu,79,79,1.0
 Robust Covariance,dogrulama,is_kolu_kategori_uyumsuzlugu,79,65,0.8228
 One-Class SVM,dogrulama,is_kolu_kategori_uyumsuzlugu,79,79,1.0
 Local Outlier Factor,dogrulama,is_kolu_kategori_uyumsuzlugu,79,42,0.5316
 Autoencoder,dogrulama,is_kolu_kategori_uyumsuzlugu,79,72,0.9114
 Kesin Kural Katmani,dogrulama,is_kolu_kategori_uyumsuzlugu,79,42,0.5316
-Isolation Forest,dogrulama,kdv_tutari,78,78,1.0
-Robust Covariance,dogrulama,kdv_tutari,78,78,1.0
-One-Class SVM,dogrulama,kdv_tutari,78,78,1.0
+Isolation Forest,dogrulama,kdv_tutari,78,74,0.9487
+Robust Covariance,dogrulama,kdv_tutari,78,73,0.9359
+One-Class SVM,dogrulama,kdv_tutari,78,73,0.9359
 Local Outlier Factor,dogrulama,kdv_tutari,78,78,1.0
-Autoencoder,dogrulama,kdv_tutari,78,78,1.0
-Kesin Kural Katmani,dogrulama,kdv_tutari,78,78,1.0
+Autoencoder,dogrulama,kdv_tutari,78,73,0.9359
+Kesin Kural Katmani,dogrulama,kdv_tutari,78,73,0.9359
 Isolation Forest,dogrulama,limit_asimi,79,58,0.7342
 Robust Covariance,dogrulama,limit_asimi,79,70,0.8861
 One-Class SVM,dogrulama,limit_asimi,79,63,0.7975
@@ -131,12 +131,12 @@ One-Class SVM,test,is_kolu_kategori_uyumsuzlugu,78,78,1.0
 Local Outlier Factor,test,is_kolu_kategori_uyumsuzlugu,78,48,0.6154
 Autoencoder,test,is_kolu_kategori_uyumsuzlugu,78,74,0.9487
 Kesin Kural Katmani,test,is_kolu_kategori_uyumsuzlugu,78,48,0.6154
-Isolation Forest,test,kdv_tutari,78,78,1.0
-Robust Covariance,test,kdv_tutari,78,78,1.0
-One-Class SVM,test,kdv_tutari,78,78,1.0
-Local Outlier Factor,test,kdv_tutari,78,78,1.0
-Autoencoder,test,kdv_tutari,78,78,1.0
-Kesin Kural Katmani,test,kdv_tutari,78,78,1.0
+Isolation Forest,test,kdv_tutari,78,76,0.9744
+Robust Covariance,test,kdv_tutari,78,75,0.9615
+One-Class SVM,test,kdv_tutari,78,76,0.9744
+Local Outlier Factor,test,kdv_tutari,78,77,0.9872
+Autoencoder,test,kdv_tutari,78,75,0.9615
+Kesin Kural Katmani,test,kdv_tutari,78,75,0.9615
 Isolation Forest,test,limit_asimi,78,51,0.6538
 Robust Covariance,test,limit_asimi,78,64,0.8205
 One-Class SVM,test,limit_asimi,78,64,0.8205
@@ -188,9 +188,9 @@ Kesin Kural Katmani,dogrulama+test,fatura_no_cakismasi,222,222,1.0
 Isolation Forest,dogrulama+test,footer_kismi,323,323,1.0
 Robust Covariance,dogrulama+test,footer_kismi,323,323,1.0
 One-Class SVM,dogrulama+test,footer_kismi,323,323,1.0
-Local Outlier Factor,dogrulama+test,footer_kismi,323,323,1.0
+Local Outlier Factor,dogrulama+test,footer_kismi,323,322,0.9969
 Autoencoder,dogrulama+test,footer_kismi,323,323,1.0
-Kesin Kural Katmani,dogrulama+test,footer_kismi,323,323,1.0
+Kesin Kural Katmani,dogrulama+test,footer_kismi,323,322,0.9969
 Isolation Forest,dogrulama+test,gecersiz_kimlik_no,155,81,0.5226
 Robust Covariance,dogrulama+test,gecersiz_kimlik_no,155,20,0.129
 One-Class SVM,dogrulama+test,gecersiz_kimlik_no,155,80,0.5161
@@ -206,21 +206,21 @@ Kesin Kural Katmani,dogrulama+test,gelecek_tarihli,157,157,1.0
 Isolation Forest,dogrulama+test,genel_toplam,156,156,1.0
 Robust Covariance,dogrulama+test,genel_toplam,156,156,1.0
 One-Class SVM,dogrulama+test,genel_toplam,156,156,1.0
-Local Outlier Factor,dogrulama+test,genel_toplam,156,156,1.0
+Local Outlier Factor,dogrulama+test,genel_toplam,156,155,0.9936
 Autoencoder,dogrulama+test,genel_toplam,156,156,1.0
-Kesin Kural Katmani,dogrulama+test,genel_toplam,156,156,1.0
+Kesin Kural Katmani,dogrulama+test,genel_toplam,156,155,0.9936
 Isolation Forest,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,157,1.0
 Robust Covariance,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,130,0.828
 One-Class SVM,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,157,1.0
 Local Outlier Factor,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,90,0.5732
 Autoencoder,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,146,0.9299
 Kesin Kural Katmani,dogrulama+test,is_kolu_kategori_uyumsuzlugu,157,90,0.5732
-Isolation Forest,dogrulama+test,kdv_tutari,156,156,1.0
-Robust Covariance,dogrulama+test,kdv_tutari,156,156,1.0
-One-Class SVM,dogrulama+test,kdv_tutari,156,156,1.0
-Local Outlier Factor,dogrulama+test,kdv_tutari,156,156,1.0
-Autoencoder,dogrulama+test,kdv_tutari,156,156,1.0
-Kesin Kural Katmani,dogrulama+test,kdv_tutari,156,156,1.0
+Isolation Forest,dogrulama+test,kdv_tutari,156,150,0.9615
+Robust Covariance,dogrulama+test,kdv_tutari,156,148,0.9487
+One-Class SVM,dogrulama+test,kdv_tutari,156,149,0.9551
+Local Outlier Factor,dogrulama+test,kdv_tutari,156,155,0.9936
+Autoencoder,dogrulama+test,kdv_tutari,156,148,0.9487
+Kesin Kural Katmani,dogrulama+test,kdv_tutari,156,148,0.9487
 Isolation Forest,dogrulama+test,limit_asimi,157,109,0.6943
 Robust Covariance,dogrulama+test,limit_asimi,157,134,0.8535
 One-Class SVM,dogrulama+test,limit_asimi,157,127,0.8089

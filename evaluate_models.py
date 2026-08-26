@@ -1,10 +1,3 @@
-"""Bes anomali modelini gercek dogrulama/test etiketleriyle degerlendirir.
-
-Bu dosya model egitiminden tamamen bagimsiz calisir. Egitim etiketi bilerek
-okunmaz; etiketler yalnizca daha once uretilmis tahminleri kontrol etmek icin
-kullanilir.
-"""
-
 import json
 from pathlib import Path
 
@@ -15,8 +8,6 @@ from sklearn.metrics import accuracy_score, confusion_matrix, precision_recall_f
 PROJECT_ROOT = Path(__file__).resolve().parent
 LABEL_ROOT = PROJECT_ROOT / "text_files_doğrulama"
 
-# DIKKAT: egitim_etiket.json bu listede bilerek yoktur. Gercek etiketler
-# modelin fit/transform adimlarina degil, yalnizca sonradan yapilan kontrole girer.
 LABEL_FILES = {
     "dogrulama": LABEL_ROOT / "dogrulama_etiket.json",
     "test": LABEL_ROOT / "test_etiket.json",
@@ -52,7 +43,6 @@ LEADERBOARD_OUTPUT = PROJECT_ROOT / "model_siralamasi.csv"
 
 
 def boolean_series(series: pd.Series, column_name: str) -> pd.Series:
-    """CSV/JSON kaynakli boolean degerleri guvenli bicimde bool'a cevirir."""
     if pd.api.types.is_bool_dtype(series):
         return series.astype(bool)
 
@@ -72,7 +62,6 @@ def boolean_series(series: pd.Series, column_name: str) -> pd.Series:
 
 
 def load_labels() -> pd.DataFrame:
-    """Yalnizca dogrulama ve test etiketlerini tek tabloda toplar."""
     frames = []
 
     for split_name, label_path in LABEL_FILES.items():
@@ -110,7 +99,6 @@ def load_labels() -> pd.DataFrame:
 
 
 def metric_row(model_name: str, split_name: str, rows: pd.DataFrame) -> dict:
-    """Pozitif sinif=True (anomali) olacak sekilde ikili metrikleri hesaplar."""
     y_true = rows["ground_truth_is_anomaly"].astype(bool)
     y_pred = rows["predicted_is_anomaly"].astype(bool)
 
@@ -141,7 +129,6 @@ def metric_row(model_name: str, split_name: str, rows: pd.DataFrame) -> dict:
 
 
 def evaluate_model(model_name: str, config: dict, labels: pd.DataFrame) -> tuple[list[dict], pd.DataFrame]:
-    """Bir model sonucunu etiketlerle eslestirir ve split bazli olcer."""
     result_path = config["path"]
     score_column = config["score_column"]
     if not result_path.exists():
@@ -161,16 +148,12 @@ def evaluate_model(model_name: str, config: dict, labels: pd.DataFrame) -> tuple
         "calibration_validation_f1",
         score_column,
     }
-    # Genis CSV basliklarinda pandas/c-engine usecols callable bazi surumlerde
-    # IndexError uretebildigi icin once tablo okunur, kolonlar sonra daraltilir.
     result = pd.read_csv(result_path, low_memory=False)
     missing = required_columns - set(result.columns)
     if missing:
         raise ValueError(f"{result_path.name} eksik kolonlar: {sorted(missing)}")
     result = result[list(required_columns)]
 
-    # Egitim tahminleri degerlendirmeye alinmaz; yalnizca etiketli dogrulama ve
-    # test kayitlari birlestirilir. validate='one_to_one' sessiz veri cogalmasini onler.
     evaluation = labels.merge(
         result,
         on=["kayit_id", "split"],
@@ -240,7 +223,6 @@ def evaluate_model(model_name: str, config: dict, labels: pd.DataFrame) -> tuple
 
 
 def combine_prediction_tables(details: list[pd.DataFrame]) -> pd.DataFrame:
-    """Gercek etiket ile bes modelin tahmin/skorlarini ayni satira getirir."""
     label_columns = [
         "kayit_id",
         "fatura_no",
@@ -266,7 +248,6 @@ def combine_prediction_tables(details: list[pd.DataFrame]) -> pd.DataFrame:
 
 
 def anomaly_type_metrics(comparison: pd.DataFrame) -> pd.DataFrame:
-    """Her anomali turunun model ve kesin kural katmaninca yakalanma oranini verir."""
     prediction_columns = {
         model_name: f"{model_name}_prediction"
         for model_name in MODEL_RESULTS
@@ -316,7 +297,6 @@ def anomaly_type_metrics(comparison: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_leaderboard(metrics_table: pd.DataFrame, split_name: str) -> pd.DataFrame:
-    """Modelleri belirtilen split'teki F1'e gore buyukten kucuge siralar."""
     leaderboard = (
         metrics_table
         .loc[
@@ -345,7 +325,6 @@ def main() -> None:
     metrics_table[metric_columns] = metrics_table[metric_columns].round(4)
     metrics_table.to_csv(METRICS_OUTPUT, index=False, encoding="utf-8-sig")
 
-    # Nihai siralama: gorulmemis test seti performansina gore, F1 buyukten kucuge.
     leaderboard = build_leaderboard(metrics_table, split_name="test")
     leaderboard.to_csv(LEADERBOARD_OUTPUT, index=False, encoding="utf-8-sig")
 
